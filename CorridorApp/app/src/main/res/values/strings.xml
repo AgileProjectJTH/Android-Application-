@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">CorridorApp</string>
     <string name="action_settings">Settings</string>
+    <string name="action_home">Home</string>
+    <string name="action_login">Login</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>
