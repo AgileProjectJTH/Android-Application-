@@ -50,34 +50,20 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/setTimeBtn"
+        android:id="@+id/setSettingBtn"
         android:enabled="true"
-        android:onClick="setSettingsBtn_OnClick"
+        android:onClick="setSettingBtn_OnClick"
         android:text="@string/setTime_activity_main"
         android:layout_below="@+id/availableCheckBox"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp" />
+        android:layout_centerHorizontal="true" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/setDate_activity_main"
-        android:id="@+id/setDateBtn"
-        android:onClick="setDateBtn_OnClick"
-        android:enabled="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/setTimeBtn"
-        android:layout_alignStart="@+id/setTimeBtn"
-        android:layout_marginBottom="49dp" />
-
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/unavailableDatePicker"
-        android:layout_below="@+id/availabilityBtn"
+        android:text="New Text"
+        android:id="@+id/settingInfo"
+        android:layout_below="@+id/setSettingBtn"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/setDateBtn"
         android:layout_marginTop="20px"/>
 
 </RelativeLayout>

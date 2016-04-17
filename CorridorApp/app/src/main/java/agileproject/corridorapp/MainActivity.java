@@ -1,5 +1,7 @@
 package agileproject.corridorapp;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,16 +16,20 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     Button availabilityBtn;
-    Button setTimeBtn;
-    Button setDateBtn;
+    Button setSettingBtn;
     TextView availabilityText;
+    TextView settingInfo;
     RelativeLayout lLayout;
     CheckBox availableCheckBox;
-    DatePicker unavailableDatePicker;
+
+    Calendar calender = Calendar.getInstance();
 
     boolean IsAvailable = true;
 
@@ -35,13 +41,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         availabilityBtn = (Button)findViewById(R.id.availabilityBtn);
-        setTimeBtn = (Button)findViewById(R.id.setTimeBtn);
-        setDateBtn = (Button)findViewById(R.id.setDateBtn);
+        setSettingBtn = (Button)findViewById(R.id.setSettingBtn);
 
         availabilityText = (TextView)findViewById(R.id.availabilityText);
+        settingInfo = (TextView)findViewById(R.id.settingInfo);
 
         availableCheckBox = (CheckBox)findViewById(R.id.availableCheckBox);
-        unavailableDatePicker = (DatePicker)findViewById(R.id.unavailableDatePicker);
 
         lLayout = (RelativeLayout)findViewById(R.id.main_layout);
         if(IsAvailable)
@@ -51,11 +56,9 @@ public class MainActivity extends AppCompatActivity {
             availabilityText.setText(R.string.available_text_activity_main);
             lLayout.setBackgroundColor((getResources().getColor(R.color.colorAvailable)));
 
+            setSettingBtn.setText(R.string.setDate_activity_main);
             availableCheckBox.setVisibility(View.INVISIBLE);
-            unavailableDatePicker.setVisibility(View.VISIBLE);
-
-            setTimeBtn.setVisibility(View.INVISIBLE);
-            setDateBtn.setVisibility(View.VISIBLE);
+            settingInfo.setText(R.string.setDateInfo_activity_main);
 
             IsAvailable = false;
         }
@@ -67,10 +70,9 @@ public class MainActivity extends AppCompatActivity {
             lLayout.setBackgroundColor((getResources().getColor(R.color.colorUnavailable)));
 
             availableCheckBox.setVisibility(View.VISIBLE);
-            unavailableDatePicker.setVisibility(View.INVISIBLE);
+            settingInfo.setText(R.string.setTimeInfo_activity_main);
 
-            setTimeBtn.setVisibility(View.VISIBLE);
-            setDateBtn.setVisibility(View.INVISIBLE);
+            setSettingBtn.setText(R.string.setTime_activity_main);
         }
     }
 
@@ -110,11 +112,9 @@ public class MainActivity extends AppCompatActivity {
             availabilityText.setText(R.string.available_text_activity_main);
             lLayout.setBackgroundColor((getResources().getColor(R.color.colorAvailable)));
 
+            setSettingBtn.setText(R.string.setDate_activity_main);
             availableCheckBox.setVisibility(View.INVISIBLE);
-            unavailableDatePicker.setVisibility(View.VISIBLE);
-
-            setTimeBtn.setVisibility(View.INVISIBLE);
-            setDateBtn.setVisibility(View.VISIBLE);
+            settingInfo.setText(R.string.setDateInfo_activity_main);
 
             IsAvailable = false;
         }
@@ -126,16 +126,43 @@ public class MainActivity extends AppCompatActivity {
             lLayout.setBackgroundColor((getResources().getColor(R.color.colorUnavailable)));
 
             availableCheckBox.setVisibility(View.VISIBLE);
-            unavailableDatePicker.setVisibility(View.INVISIBLE);
+            settingInfo.setText(R.string.setTimeInfo_activity_main);
 
-            setTimeBtn.setVisibility(View.VISIBLE);
-            setDateBtn.setVisibility(View.INVISIBLE);
+            setSettingBtn.setText(R.string.setTime_activity_main);
 
             IsAvailable = true;
         }
     }
 
-    public void setSettingsBtn_OnClick(View v){
-
+    public void setSettingBtn_OnClick(View v){
+        if(IsAvailable) {
+            new TimePickerDialog(MainActivity.this, timeListener, calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE), false).show();
+        }
+        else {
+            new DatePickerDialog(MainActivity.this, dateListener, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show();
+        }
     }
+
+    public void setTimeBtn_OnClick(View v){
+        new TimePickerDialog(MainActivity.this, timeListener, calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE), false).show();
+    }
+
+    TimePickerDialog.OnTimeSetListener timeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+        }
+    };
+
+    public void setDateBtn_OnClick(View v){
+        new DatePickerDialog(MainActivity.this, dateListener, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            //https://www.youtube.com/watch?v=Qx23fC4Wgpw for more info
+        }
+    };
+
 }

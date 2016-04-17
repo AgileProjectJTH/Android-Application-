@@ -12,4 +12,6 @@
     <string name="setDate_activity_main">SET DATE</string>
     <string name="setTimeInfo_activity_main">If box is checked the staff member will automatically be signed out as Unavailable after the set time ends.</string>
     <string name="setDateInfo_activity_main">Staff member will be checked as unavailable until set date.</string>
+    <string name="title_activity_date">DateActivity</string>
+    <string name="title_activity_time">TimeActivity</string>
 </resources>
