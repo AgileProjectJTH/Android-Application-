@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
-            Intent i = new Intent(this, MainActivity.class);
-            this.startActivity(i);
             return true;
         }
         else if (id == R.id.action_login) {
