@@ -4,4 +4,12 @@
     <string name="action_home">Home</string>
     <string name="action_login">Login</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="available_text_activity_main">You are currently available. To become unavailable, please click on the big button below \"Unavailable\".</string>
+    <string name="unavailable_text_activity_main">You are currently unavailable. To become available, please click on the big button below \"Available\".</string>
+    <string name="unavailable_activity_main">Unavailable</string>
+    <string name="available_activity_main">Available</string>
+    <string name="setTime_activity_main">SET TIME</string>
+    <string name="setDate_activity_main">SET DATE</string>
+    <string name="setTimeInfo_activity_main">If box is checked the staff member will automatically be signed out as Unavailable after the set time ends.</string>
+    <string name="setDateInfo_activity_main">Staff member will be checked as unavailable until set date.</string>
 </resources>

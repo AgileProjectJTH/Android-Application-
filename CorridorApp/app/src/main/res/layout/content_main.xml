@@ -10,10 +10,74 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="agileproject.corridorapp.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:id="@+id/main_layout">
+
+    <Button
+        android:layout_width="500px"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/availabilityBtn"
+        android:layout_marginTop="39dp"
+        android:onClick="availabilityBtn_OnClick"
+        android:nestedScrollingEnabled="true"
+        android:enabled="true"
+        android:layout_below="@+id/availabilityText"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/available_text_activity_main"
+        android:id="@+id/availabilityText"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="300px"
+        android:layout_height="200px"
+        android:text="00:15"
+        android:textSize="22dp"
+        android:id="@+id/availableCheckBox"
+        android:checked="false"
+        android:layout_below="@+id/availabilityBtn"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setTimeBtn"
+        android:enabled="true"
+        android:onClick="setSettingsBtn_OnClick"
+        android:text="@string/setTime_activity_main"
+        android:layout_below="@+id/availableCheckBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setDate_activity_main"
+        android:id="@+id/setDateBtn"
+        android:onClick="setDateBtn_OnClick"
+        android:enabled="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/setTimeBtn"
+        android:layout_alignStart="@+id/setTimeBtn"
+        android:layout_marginBottom="49dp" />
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/unavailableDatePicker"
+        android:layout_below="@+id/availabilityBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/setDateBtn"
+        android:layout_marginTop="20px"/>
+
 </RelativeLayout>
