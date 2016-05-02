@@ -14,4 +14,6 @@
     <string name="setDateInfo_activity_main">Staff member will be checked as unavailable until set date.</string>
     <string name="title_activity_date">DateActivity</string>
     <string name="title_activity_time">TimeActivity</string>
+    <string name="drawer_open">Opening Drawer</string>
+    <string name="drawer_close">Closing Drawer</string>
 </resources>

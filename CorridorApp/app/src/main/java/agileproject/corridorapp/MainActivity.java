@@ -3,17 +3,25 @@ package agileproject.corridorapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
     Calendar calender = Calendar.getInstance();
 
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
+    private ActionBarDrawerToggle mDrawrtoggle;
+    private DrawerLayout mDrawerlayout;
+
     boolean IsAvailable = true;
 
     @Override
@@ -47,7 +60,36 @@ public class MainActivity extends AppCompatActivity {
         settingInfo = (TextView)findViewById(R.id.settingInfo);
 
         availableCheckBox = (CheckBox)findViewById(R.id.availableCheckBox);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        mDrawerlayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawrtoggle = new ActionBarDrawerToggle(this, mDrawerlayout,R.string.drawer_open,R.string.drawer_close){
+            public void onDrawerOpened(View DrawerView){
+                super.onDrawerOpened(DrawerView);
+                getSupportActionBar().setTitle("Menu");
+                invalidateOptionsMenu();
+            }
+            public void onDrawerClosed(View view){
+                super.onDrawerOpened(view);
+                getSupportActionBar().setTitle("CorridorApp");
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("hej: ", view.toString() + " " + position);
+                if(position == 1)
+                {
+                    Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(i);
+                }
+            }
+        });
+        addDrawerItems();
+        DrawerSetup();
         lLayout = (RelativeLayout)findViewById(R.id.main_layout);
         if(IsAvailable)
         {
@@ -76,11 +118,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+    private void addDrawerItems() {
+        String[] items = { "Login", "Login" };
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+        mDrawerList.setAdapter(mAdapter);
+    }
+    private void DrawerSetup(){
+        mDrawrtoggle.setDrawerIndicatorEnabled(true);
+        mDrawerlayout.setDrawerListener(mDrawrtoggle);
+    }
+
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }*/
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawrtoggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawrtoggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -92,18 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_home) {
+        if(mDrawrtoggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        /*if (id == R.id.action_home) {
             return true;
         }
         else if (id == R.id.action_login) {
             Intent i = new Intent(this, LoginActivity.class);
             this.startActivity(i);
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
-
     public void availabilityBtn_OnClick(View v){
         if(IsAvailable)
         {

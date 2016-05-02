@@ -30,7 +30,8 @@
         android:layout_width="400px"
         android:layout_height="500px"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout2">
 
         <EditText
             android:layout_width="match_parent"
@@ -60,4 +61,5 @@
             android:layout_gravity="right"
             />
     </LinearLayout>
+
 </RelativeLayout>
