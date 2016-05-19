@@ -1,8 +1,10 @@
 package agileproject.corridorapp;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -26,9 +28,13 @@ public class ApiRequest {
     }
     }, methodstring, pathstring, messagestring);
      */
-    static public void SendRequest(Callback callback, String method, String path, String message){
-        Sending jokes = new Sending(callback, method, path, message);
-        jokes.execute();
+    static public void SendRequest(String method, String path, String message, String token, Callback callback){
+        Sending s = new Sending(callback, method, path, message, "application/json", token);
+        s.execute();
+    }
+    static public void LoginRequest(String message, Callback callback){
+        Sending s = new Sending(callback,"POST", "token", message, "application/x-www-form-urlencoded", null);
+        s.execute();
     }
 
     interface Callback{
@@ -40,29 +46,39 @@ public class ApiRequest {
         String method = null;
         String path = null;
         String message = null;
-        public Sending(Callback CB, String m, String p, String msg)
+        String type = null;
+        String token = null;
+        public Sending(Callback CB, String m, String p, String msg, String t, String tkn)
         {
             cb = CB;
             method = m;
             path = p;
             message = msg;
+            type = t;
+            token = tkn;
         }
         @Override
         protected String doInBackground(Void... params) {
             try {
-                URL url = new URL(path);
+                URL url = new URL("http://193.10.30.155/CorridorAPI/"+path);
                 HttpURLConnection urlcon = (HttpURLConnection)url.openConnection();
                 urlcon.setRequestMethod(method);
+                urlcon.setRequestProperty("Content-type", type);
+                if(token != null)
+                    urlcon.setRequestProperty("Authorization", token);
                 if(message != null)
                 {
-                    OutputStream os = urlcon.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                    writer.flush();
-                    writer.close();
+                    urlcon.setDoOutput(true);
+                    DataOutputStream os = new DataOutputStream(urlcon.getOutputStream());
+                    os.writeBytes(message);
+                    os.flush();
                     os.close();
                 }
+                Log.d("response-code: ", ""+urlcon.getResponseCode() +" "+ urlcon.getResponseMessage());
                 BufferedReader r = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
                 result = r.readLine();
+                if(result == null)
+                    result = ""+urlcon.getResponseCode();
                 Log.d("Got: ", result);
                 r.close();
                 urlcon.disconnect();

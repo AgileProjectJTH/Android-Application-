@@ -11,7 +11,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="agileproject.corridorapp.MainActivity"
     tools:showIn="@layout/activity_main"
-    android:id="@+id/main_layout">
+    android:id="@+id/main_layout"
+    android:gravity="center_vertical">
 
     <Button
         android:layout_width="500px"
@@ -65,5 +66,13 @@
         android:layout_below="@+id/setSettingBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20px"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="400px"
+        android:layout_height="400px"
+        android:id="@+id/main_progressBar"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

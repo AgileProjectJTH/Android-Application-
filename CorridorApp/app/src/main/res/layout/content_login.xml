@@ -23,15 +23,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="agileproject.corridorapp.LoginActivity"
-    tools:showIn="@layout/activity_login">
-
+    tools:showIn="@layout/activity_login"
+    android:onClick="Login_func">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="400px"
         android:layout_height="500px"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout2">
+        android:id="@+id/linearLayout2"
+        android:weightSum="1">
 
         <EditText
             android:layout_width="match_parent"
@@ -59,7 +60,19 @@
             android:layout_marginRight="10px"
             android:layout_marginTop="10px"
             android:layout_gravity="right"
-            />
+            android:onClick="Login_func" />
+
     </LinearLayout>
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="400px"
+        android:layout_height="400px"
+        android:id="@+id/Login_progressBar"
+        android:layout_weight="3"
+        android:layout_alignParentBottom="false"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:visibility="gone" />
 </RelativeLayout>
