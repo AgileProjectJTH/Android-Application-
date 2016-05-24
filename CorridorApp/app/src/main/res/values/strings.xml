@@ -16,4 +16,5 @@
     <string name="title_activity_time">TimeActivity</string>
     <string name="drawer_open">Opening Drawer</string>
     <string name="drawer_close">Closing Drawer</string>
+    <string name="Not_logged_in">You are currently not logged in.</string>
 </resources>

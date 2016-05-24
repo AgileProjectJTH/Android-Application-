@@ -91,20 +91,6 @@ public class MainActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
             }
         };
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("hej: ", view.toString() + " " + position);
-                if(position == 1)
-                {
-                    Intent i = new Intent(getApplicationContext(),LoginActivity.class);
-                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    startActivity(i);
-                }
-            }
-        });
-        addDrawerItems();
-        DrawerSetup();
         lLayout = (RelativeLayout)findViewById(R.id.main_layout);
     }
 
@@ -116,19 +102,67 @@ public class MainActivity extends AppCompatActivity {
         String date = df.format(d).toString();
         Log.d("Date ", date);
         SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
-        Log.d("Token ", sp.getString("Token", null));
         ApiRequest.SendRequest("GET", "api/staff?dateAndTime=" + date, null, sp.getString("Token", null), new ApiRequest.Callback() {
             @Override
             public void Response(String result) {
-                if(result.equals("true"))
-                    SetAvailable();
-                else if(result.equals("false"))
-                    SetUnavailable();
+                if(result == null)
+                    SetUnlogged();
+                else{
+                    mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.d("hej: ", view.toString() + " " + position);
+                            if(position == 1)
+                            {
+                                SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
+                                SharedPreferences.Editor e = sp.edit();
+                                e.putString("Token", null);
+                                e.apply();
+                                mDrawerlayout.closeDrawer(mDrawerList);
+                                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                                i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(i);
+                            }
+                        }
+                    });
+                    addDrawerItems(true);
+                    DrawerSetup();
+                    if(result.equals("true"))
+                        SetAvailable();
+                    else if(result.equals("false"))
+                        SetUnavailable();
+                }
             }
         });
     }
+    private void SetUnlogged(){
+        availabilityText.setText(R.string.Not_logged_in);
+        availabilityBtn.setVisibility(View.GONE);
+        setSettingBtn.setVisibility(View.GONE);
+        availableCheckBox.setVisibility(View.GONE);
+        settingInfo.setVisibility(View.GONE);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("hej: ", view.toString() + " " + position);
+                if(position == 1)
+                {
+                    mDrawerlayout.closeDrawer(mDrawerList);
+                    Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                    i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(i);
+                }
+            }
+        });
+        addDrawerItems(false);
+        DrawerSetup();
+        IsAvailable = false;
+    }
 
     private void SetAvailable(){
+        availabilityBtn.setVisibility(View.VISIBLE);
+        setSettingBtn.setVisibility(View.VISIBLE);
+        settingInfo.setVisibility(View.VISIBLE);
         availabilityBtn.setText(R.string.unavailable_activity_main);
         availabilityBtn.setBackgroundColor(getResources().getColor(R.color.colorBtnUnavailable));
         availabilityText.setText(R.string.available_text_activity_main);
@@ -139,6 +173,9 @@ public class MainActivity extends AppCompatActivity {
         IsAvailable = false;
     }
     private void SetUnavailable(){
+        availabilityBtn.setVisibility(View.VISIBLE);
+        setSettingBtn.setVisibility(View.VISIBLE);
+        settingInfo.setVisibility(View.VISIBLE);
         availabilityBtn.setText(R.string.available_activity_main);
         availabilityBtn.setBackgroundColor(getResources().getColor(R.color.colorBtnAvailable));
         availabilityText.setText(R.string.unavailable_text_activity_main);
@@ -148,8 +185,12 @@ public class MainActivity extends AppCompatActivity {
         setSettingBtn.setText(R.string.setTime_activity_main);
         IsAvailable = true;
     }
-    private void addDrawerItems() {
-        String[] items = { "Login", "Login" };
+    private void addDrawerItems(boolean Loggedin) {
+        String[] items = new String[2];
+        if(!Loggedin){
+            items[0] = "Login"; items[1] = "Login";}
+        else{
+            items[0] = "Logout"; items[1] = "Logout";}
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         mDrawerList.setAdapter(mAdapter);
     }
