@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         pbar.setVisibility(View.VISIBLE);
         ApiRequest.LoginRequest(msg, new ApiRequest.Callback() {
             @Override
-            public void Response(String result) {
+            public void Response(String result, int code) {
                 try {
                     JSONObject o = new JSONObject(result);
                     String Token = o.getString("token_type")+" "+o.getString("access_token");

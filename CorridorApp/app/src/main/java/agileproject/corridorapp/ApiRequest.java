@@ -38,11 +38,12 @@ public class ApiRequest {
     }
 
     interface Callback{
-        abstract void Response(String result);
+        abstract void Response(String result, int code);
     }
     static class Sending extends AsyncTask<Void,Void,String> {
         Callback cb = null;
         String result = null;
+        int code = 0;
         String method = null;
         String path = null;
         String message = null;
@@ -75,10 +76,9 @@ public class ApiRequest {
                     os.close();
                 }
                 Log.d("response-code: ", ""+urlcon.getResponseCode() +" "+ urlcon.getResponseMessage());
+                code = urlcon.getResponseCode();
                 BufferedReader r = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
                 result = r.readLine();
-                if(result == null)
-                    result = ""+urlcon.getResponseCode();
                 Log.d("Got: ", result);
                 r.close();
                 urlcon.disconnect();
@@ -88,7 +88,7 @@ public class ApiRequest {
 
         @Override
         protected void onPostExecute(String s) {
-            cb.Response(result);
+            cb.Response(result,code);
             super.onPostExecute(s);
         }
     }

@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
         ApiRequest.SendRequest("GET", "api/staff?dateAndTime=" + date, null, sp.getString("Token", null), new ApiRequest.Callback() {
             @Override
-            public void Response(String result) {
+            public void Response(String result, int code) {
                 if(result == null)
                     SetUnlogged();
                 else{
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         setSettingBtn.setText(R.string.setDate_activity_main);
         availableCheckBox.setVisibility(View.INVISIBLE);
         settingInfo.setText(R.string.setDateInfo_activity_main);
-        IsAvailable = false;
+        IsAvailable = true;
     }
     private void SetUnavailable(){
         availabilityBtn.setVisibility(View.VISIBLE);
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         availableCheckBox.setVisibility(View.VISIBLE);
         settingInfo.setText(R.string.setTimeInfo_activity_main);
         setSettingBtn.setText(R.string.setTime_activity_main);
-        IsAvailable = true;
+        IsAvailable = false;
     }
     private void addDrawerItems(boolean Loggedin) {
         String[] items = new String[2];
@@ -247,15 +248,15 @@ public class MainActivity extends AppCompatActivity {
             Date from = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String fromdate = df.format(from);
-            String json = "{\"fromDateAndTime\":\""+from+"\",\"available\":\"false\"}";
+            String json = ScheduleJson(fromdate,null,false);
+            Log.d("json ", json);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
             pbar.setVisibility(View.VISIBLE);
-            ApiRequest.SendRequest("POST", "api/schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
+            ApiRequest.SendRequest("POST", "Api/Schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
                 @Override
-                public void Response(String result) {
-                    if(result.equals("200")){
-                        SetUnavailable();
-                        IsAvailable = false;}
+                public void Response(String result, int code) {
+                    if(code == 200){
+                        SetUnavailable();}
                     else
                         Toast.makeText(getApplicationContext(),"Could not change your status.",Toast.LENGTH_SHORT).show();
                     pbar.setVisibility(View.GONE);
@@ -267,15 +268,15 @@ public class MainActivity extends AppCompatActivity {
             Date from = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String fromdate = df.format(from);
-            String json = "{\"fromDateAndTime\":\""+from+"\",\"available\":\"true\"}";
+            String json = ScheduleJson(fromdate,null,true);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
+            Log.d("json ", json);
             pbar.setVisibility(View.VISIBLE);
-            ApiRequest.SendRequest("POST", "api/schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
+            ApiRequest.SendRequest("POST", "Api/Schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
                 @Override
-                public void Response(String result) {
-                    if(result.equals("200")){
-                        SetUnavailable();
-                        IsAvailable = true;}
+                public void Response(String result, int code) {
+                    if(code == 200){
+                        SetAvailable();}
                     else
                         Toast.makeText(getApplicationContext(),"Could not change your status.",Toast.LENGTH_SHORT).show();
                     pbar.setVisibility(View.GONE);
@@ -311,13 +312,15 @@ public class MainActivity extends AppCompatActivity {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String from = df.format(fromdate);
             String to = df.format(todate);
-            String json = "{\"fromDateAndTime\":\""+from+"\",\"toDateAndTime\":\""+to+"\",\"available\":\"true\"}";
+
+            String json = ScheduleJson(from,to,false);
+            Log.d("json", json);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
             pbar.setVisibility(View.VISIBLE);
-            ApiRequest.SendRequest("POST", "api/schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
+            ApiRequest.SendRequest("POST", "Api/Schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
                 @Override
-                public void Response(String result) {
-                    if(result.equals("200"))
+                public void Response(String result, int code) {
+                    if(code == 200)
                         SetUnavailable();
                     else
                         Toast.makeText(getApplicationContext(),"Could not change your status.",Toast.LENGTH_SHORT).show();
@@ -341,14 +344,14 @@ public class MainActivity extends AppCompatActivity {
             Date from = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String fromdate = df.format(from);
-            String json = "{\"fromDateAndTime\":\""+fromdate+"\",\"toDateAndTime\":\""+todate+"\",\"available\":\"false\"}";
+            String json = ScheduleJson(fromdate,todate,true);
             Log.d("This shit ", json);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
             pbar.setVisibility(View.VISIBLE);
-            ApiRequest.SendRequest("POST", "api/schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
+            ApiRequest.SendRequest("POST", "Api/Schedule", json, sp.getString("Token", null), new ApiRequest.Callback() {
                 @Override
-                public void Response(String result) {
-                    if(result.equals("200"))
+                public void Response(String result, int code) {
+                    if(code == 200)
                         SetUnavailable();
                     else
                         Toast.makeText(getApplicationContext(),"Could not change your status.",Toast.LENGTH_SHORT).show();
@@ -358,5 +361,23 @@ public class MainActivity extends AppCompatActivity {
             //https://www.youtube.com/watch?v=Qx23fC4Wgpw for more info
         }
     };
+    public String ScheduleJson(String Fromdate, String Todate, boolean available)
+    {
+        //String returns = "{\"fromDateAndTime\":\""+Fromdate+"\",\"toDateAndTime\":null,\"roomNr\":null,\"course\":null,\"scheduleInfo\":null,\"available\":"+available+"}";
+        //return returns;
+        JSONObject o = new JSONObject();
+        try {
+            o.put("fromDateAndTime",Fromdate);
+            o.put("toDateAndTime", Todate);
+            o.put("roomNr", null);
+            o.put("course", null);
+            o.put("scheduleInfo", null);
+            o.put("available", available);
+            return o.toString();
+        }catch (JSONException e){
+            Log.d("Error ", e.getMessage());
+        }
+        return "hej";
+    }
 
 }
