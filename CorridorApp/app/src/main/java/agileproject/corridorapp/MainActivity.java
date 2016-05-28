@@ -287,10 +287,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setSettingBtn_OnClick(View v){
         if(IsAvailable) {
-            new TimePickerDialog(MainActivity.this, timeListener, calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE), false).show();
+            new DatePickerDialog(MainActivity.this, dateListener, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show();
         }
         else {
-            new DatePickerDialog(MainActivity.this, dateListener, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH),calender.get(Calendar.DAY_OF_MONTH)).show();
+            new TimePickerDialog(MainActivity.this, timeListener, calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE), false).show();
         }
     }
 
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
             String from = df.format(fromdate);
             String to = df.format(todate);
 
-            String json = ScheduleJson(from,to,false);
+            String json = ScheduleJson(from,to,true);
             Log.d("json", json);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
             pbar.setVisibility(View.VISIBLE);
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void Response(String result, int code) {
                     if(code == 200)
-                        SetUnavailable();
+                        SetAvailable();
                     else
                         Toast.makeText(getApplicationContext(),"Could not change your status.",Toast.LENGTH_SHORT).show();
                     pbar.setVisibility(View.GONE);
@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
             Date from = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String fromdate = df.format(from);
-            String json = ScheduleJson(fromdate,todate,true);
+            String json = ScheduleJson(fromdate,todate,false);
             Log.d("This shit ", json);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
             pbar.setVisibility(View.VISIBLE);
