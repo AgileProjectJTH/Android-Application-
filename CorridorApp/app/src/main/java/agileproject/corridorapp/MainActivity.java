@@ -268,7 +268,22 @@ public class MainActivity extends AppCompatActivity {
             Date from = new Date();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String fromdate = df.format(from);
-            String json = ScheduleJson(fromdate,null,true);
+            String json = null;
+            if(availableCheckBox.isChecked())
+            {
+                Date to = new Date();
+                if(to.getMinutes()+15 > 60)
+                {
+                    to.setHours(to.getHours()+1);
+                    to.setMinutes((to.getMinutes()+15)-60);
+                }
+                else
+                    to.setMinutes(to.getMinutes()+15);
+                String todate = df.format(to);
+                json = ScheduleJson(fromdate,todate,true);
+            }
+            else
+                json = ScheduleJson(fromdate,null,true);
             SharedPreferences sp = getSharedPreferences("Data", MODE_PRIVATE);
             Log.d("json ", json);
             pbar.setVisibility(View.VISIBLE);
